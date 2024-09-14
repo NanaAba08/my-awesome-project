@@ -1,7 +1,27 @@
-// Function to display the current date and time
-function displayDateTime() {
-  const now = new Date();
-  const days = [
+function refreshWeather(response) {
+  let temperatureElement = document.querySelector("#temperature");
+  let temperature = response.data.temperature.current;
+  let cityElement = document.querySelector("#city");
+  let descriptionElement = document.querySelector("#description");
+  let humidityElement = document.querySelector("#humidity");
+  let windSpeedElement = document.querySelector("#wind-speed");
+  let timeElement = document.querySelector("#time");
+  let date = new Date(response.data.time * 1000);
+  let iconElement = document.querySelector("#icon");
+
+  cityElement.innerHTML = response.data.city;
+  timeElement.innerHTML = formatDate(date);
+  descriptionElement.innerHTML = response.data.condition.description;
+  humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
+  windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
+  temperatureElement.innerHTML = Math.round(temperature);
+  iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon" />`;
+}
+
+function formatDate(date) {
+  let minutes = date.getMinutes();
+  let hours = date.getHours();
+  let days = [
     "Sunday",
     "Monday",
     "Tuesday",
@@ -10,27 +30,29 @@ function displayDateTime() {
     "Friday",
     "Saturday",
   ];
-  const day = days[now.getDay()];
-  const hours = now.getHours().toString().padStart(2, "0");
-  const minutes = now.getMinutes().toString().padStart(2, "0");
-  const currentTime = `${day} ${hours}:${minutes}`;
+  let day = days[date.getDay()];
 
-  const currentDetails = document.querySelector(".current-details");
-  const weatherInfo =
-    "moderate rain <br /> Humidity: <strong>87%</strong>, Wind: <strong>7.2km/h</strong>";
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
 
-  currentDetails.innerHTML = `${currentTime}, ${weatherInfo}`;
+  return `${day} ${hours}:${minutes}`;
 }
 
-displayDateTime();
+function searchCity(city) {
+  let apiKey = "af3a904f4047c5216f0o5b53b98t54ed";
+  let apiUrl = `https://api.shecodes.io/weather/v1/current?query={query}&key={key}`;
+  axios.get(apiUrl).then(refreshWeather);
+}
 
-// Feature #2: Search Engine
-const searchForm = document.querySelector("header form");
-const currentCity = document.querySelector(".current-city");
+function handleSearchSubmit(event) {
+  event.preventDefault();
+  let searchInput = document.querySelector("#search-form-input");
 
-searchForm.addEventListener("submit", function (event) {
-  event.preventDefault(); // Prevent form from submitting
+  searchCity(searchInput.value);
+}
 
-  const city = document.querySelector(".search-input").value;
-  currentCity.textContent = city;
-});
+let searchFormElement = document.querySelector("#search-form");
+searchFormElement.addEventListener("submit", handleSearchSubmit);
+
+searchCity("Paris");
