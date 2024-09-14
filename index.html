@@ -10,6 +10,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="src/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
     <title>My weather application</title>
   </head>
   <body>
@@ -26,27 +27,28 @@
         </form>
       </header>
       <main>
-        <div class="current-weather">
+        <div class="weather-app-data">
           <div>
-            <h1 class="current-city">Paris</h1>
-            <p class="current-details">
-              Saturday 15:32, moderate rain <br />
-              Humidity: <strong>87%</strong>, Wind: <strong>7.2km/h</strong>
+            <h1 class="weather-app-city" id="city"></h1>
+            <p class="weather-app-details">
+              <span id="time"></span>,
+              <span id="description"></span>
+              <br />
+              Humidity: <strong id="humidity"></strong>, Wind:
+              <strong id="wind-speed"></strong>
             </p>
           </div>
-          <div class="current-temperature">
-            <span class="current-temperature-icon">☀️</span
-            ><span class="current-temperature-value">24</span
-            ><span class="current-temperature-unit">°C</span>
+          <div class="weather-app-temperature-container">
+            <div id="icon"></div>
+            <div class="weather-app-temperature" id="temperature"></div>
+            <div class="weather-app-unit">°C</div>
           </div>
         </div>
       </main>
       <footer>
         <p>
           This project was coded by
-          <a
-            href="https://www.linkedin.com/in/elizabeth-aba-williams-ca-08ba8367/"
-            target="_blank"
+          <a href="https://github.com/NanaAba08" target="_blank"
             >Elizabeth Williams</a
           >
           and is
@@ -54,7 +56,7 @@
             href="https://github.com/NanaAba08/my-awesome-project/tree/main"
             target="_blank"
           >
-            on GitHub</a
+            open-sourced on GitHub</a
           >
           and
           <a
